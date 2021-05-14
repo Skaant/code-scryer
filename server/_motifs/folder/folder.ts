@@ -3,21 +3,28 @@ import { readdir } from "fs/promises";
 import { resolve as pathResolve } from "path";
 import { File } from "../file/file";
 
-/** `list` may be more optimized for path searches while `node` can hold custom properties. */
-export type FolderContentFormat = "list" | "node";
+/**
+ * * `string` may be more optimized for path searches,
+ * * `node` can hold custom properties. */
+type FolderContentFormat = "string" | "node";
 
-export type FolderGetContentProps = {
-  recursive: boolean;
+type FolderGetContentProps = {
   format: FolderContentFormat;
+  /** Can only be `true` if `format === "string"`. */
+  recursive: boolean;
 };
 
-export type FolderContent = (Folder | File)[];
+type FolderContent = (Folder | File)[];
 
+type FolderConstructorOptions = {
+  /** Pre-load `cache.content` at instanciation ? */
+  getContent?: boolean;
+};
 export class Folder {
   static ERROR_FOLDER_NOT_FOUND = "folder not found";
   name!: string;
   path!: string;
-  cache: {
+  private cache: {
     content?: FolderContent;
   } = {};
 
@@ -27,18 +34,21 @@ export class Folder {
     this.path = path;
   }
 
-  async getContent({}: FolderGetContentProps = {}): Promise<FolderContent> {
-    const dirents = await readdir(this.path, { withFileTypes: true });
-    return dirents.map((dirent) =>
-      dirent.isFile()
-        ? new File({
-            name: dirent.name,
-            path: pathResolve(this.path, dirent.name),
-          })
-        : new Folder({
-            name: dirent.name,
-            path: pathResolve(this.path, dirent.name),
-          })
-    );
+  async provisionContent(): Promise<FolderContent> {
+    if (!this.cache.content) {
+      const dirents = await readdir(this.path, { withFileTypes: true });
+      this.cache.content = dirents.map((dirent) => {
+        const props = {
+          name: dirent.name,
+          path: pathResolve(this.path, dirent.name),
+        };
+        return dirent.isFile() ? new File(props) : new Folder(props);
+      });
+    }
+    return this.cache.content;
+  }
+
+  get content() {
+    return this.cache.content;
   }
 }

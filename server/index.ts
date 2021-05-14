@@ -13,7 +13,8 @@ app.get("/folder", async (req, res) => {
       name: "_root",
       path: pathResolve(__dirname, path),
     });
-    return res.send({ content: await folder.getContent() });
+    await folder.provisionContent();
+    return res.send(folder);
   } catch (err) {
     return err.message === Folder.ERROR_FOLDER_NOT_FOUND
       ? res.status(401).send(Folder.ERROR_FOLDER_NOT_FOUND)
