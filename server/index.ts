@@ -1,10 +1,15 @@
 import express from "express";
-import { stat } from "fs/promises";
+import cors from "cors";
 import { resolve as pathResolve } from "path";
-import { Folder } from "./_motifs/folder/folder";
-
+import { Folder } from "code-scryer--shared";
 const app = express();
 const PORT = 9001;
+
+app.use(
+  cors({
+    allowedHeaders: ["Access-Control-Allow-Origin: http://localhost:3000"],
+  })
+);
 
 app.get("/folder", async (req, res) => {
   const path = req.query.path?.toString() || "";
