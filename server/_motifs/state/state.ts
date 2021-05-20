@@ -6,25 +6,20 @@ type ServerStateContent = {
 };
 
 export class ServerState {
-  content: ServerStateContent;
+  private static content: ServerStateContent;
 
-  constructor(options: ServerOptions) {
-    this.content = { options };
+  private constructor(options: ServerOptions) {
+    ServerState.content = { options };
   }
 
   /** @param compoundKey `state.compound.key.prop` */
-  get(compoundKey?: string) {
-    if (compoundKey) {
-      const splitKey = compoundKey.split(".");
-      return splitKey.reduce((content, key) => content[key], this.content);
-    }
-    return this.content;
+  static get(compoundKey?: string) {
+    return ServerState.content;
   }
 
-  /** @param newContent `state.compound.key.prop` */
-  set(newContent: Partial<ServerStateContent>) {
-    this.content = {
-      ...this.content,
+  static set(newContent: Partial<ServerStateContent>) {
+    ServerState.content = {
+      ...ServerState.content,
       ...newContent,
     };
   }
