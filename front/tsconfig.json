@@ -1,4 +1,7 @@
 {
+  "compilerOptions": {
+    "jsx": "react",
+  },
   "extends": "../tsconfig.json",
-  "files": ["./front.ts"]
+  "files": ["front.tsx"]
 }

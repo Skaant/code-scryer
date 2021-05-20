@@ -27,7 +27,7 @@ app.get("/folder", async (req, res) => {
   }
 });
 app.get("/", (req, res) =>
-  res.send("<html><body><script src='/front.js'></script></body></html>")
+  res.send("<html><body><div id='app'></div><script src='/front.js'></script></body></html>")
 );
 app.get("/front.js", (req, res) =>
   res.sendFile(pathResolve(__dirname, "../front/front.js"))
