@@ -3,6 +3,7 @@ import { readdir } from "fs/promises";
 import { resolve as pathResolve } from "path";
 import { ServerFile } from "../file/file";
 import { Folder, FolderContent } from "../../../_motifs/folder/folder";
+import { ServerState } from "../state/state";
 
 export class ServerFolder implements Folder {
   static ERROR_FOLDER_NOT_FOUND = "folder not found";
@@ -19,7 +20,8 @@ export class ServerFolder implements Folder {
     path: string;
     content?: FolderContent;
   }) {
-    if (!statSync(path)) throw new Error(ServerFolder.ERROR_FOLDER_NOT_FOUND);
+    if (!statSync(pathResolve(ServerState.get().options.projectPath, path)))
+      throw new Error(ServerFolder.ERROR_FOLDER_NOT_FOUND);
     this.name = name;
     this.path = path;
     this.content = content;
@@ -27,7 +29,9 @@ export class ServerFolder implements Folder {
 
   async provisionContent(): Promise<FolderContent> {
     if (!this.content) {
-      const dirents = await readdir(this.path, { withFileTypes: true });
+      const dirents = await readdir(ServerState.get().options.projectPath, {
+        withFileTypes: true,
+      });
       this.content = dirents.map((dirent) => {
         const props = {
           name: dirent.name,
