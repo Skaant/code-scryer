@@ -2,8 +2,16 @@ import express from "express";
 import cors from "cors";
 import { resolve as pathResolve } from "path";
 import { ServerFolder } from "./_motifs/folder/folder";
+import { ServerState } from "./_motifs/state/state";
+
 const app = express();
 const PORT = 9001;
+
+ServerState.set({
+  options: {
+    projectPath: pathResolve(__dirname, ".."),
+  },
+});
 
 app.use(
   cors({
@@ -16,7 +24,7 @@ app.get("/folder", async (req, res) => {
   try {
     const folder = new ServerFolder({
       name: "_root",
-      path: pathResolve(__dirname, path),
+      path: "",
     });
     await folder.provisionContent();
     return res.send(folder);
@@ -27,7 +35,9 @@ app.get("/folder", async (req, res) => {
   }
 });
 app.get("/", (req, res) =>
-  res.send("<html><body><div id='app'></div><script src='/front.js'></script></body></html>")
+  res.send(
+    "<html><body><div id='app'></div><script src='/front.js'></script></body></html>"
+  )
 );
 app.get("/front.js", (req, res) =>
   res.sendFile(pathResolve(__dirname, "../front/front.js"))
