@@ -1,7 +1,7 @@
 import express from "express";
 import cors from "cors";
 import { resolve as pathResolve } from "path";
-import { Folder } from "../_motifs/folder/folder";
+import { ServerFolder } from "./_motifs/folder/folder";
 const app = express();
 const PORT = 9001;
 
@@ -14,19 +14,24 @@ app.use(
 app.get("/folder", async (req, res) => {
   const path = req.query.path?.toString() || "";
   try {
-    const folder = new Folder({
+    const folder = new ServerFolder({
       name: "_root",
       path: pathResolve(__dirname, path),
     });
     await folder.provisionContent();
     return res.send(folder);
   } catch (err) {
-    return err.message === Folder.ERROR_FOLDER_NOT_FOUND
-      ? res.status(401).send(Folder.ERROR_FOLDER_NOT_FOUND)
+    return err.message === ServerFolder.ERROR_FOLDER_NOT_FOUND
+      ? res.status(401).send(ServerFolder.ERROR_FOLDER_NOT_FOUND)
       : res.status(500).send(err);
   }
 });
-app.get("/", (req, res) => res.send("zara"));
+app.get("/", (req, res) =>
+  res.send("<html><body><script src='/front.js'></script></body></html>")
+);
+app.get("/front.js", (req, res) =>
+  res.sendFile(pathResolve(__dirname, "../front/front.js"))
+);
 
 app.listen(PORT, () => {
   console.log(`code-scryer server running at : https://localhost:${PORT}`);
