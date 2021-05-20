@@ -1,7 +1,7 @@
 import express from "express";
 import cors from "cors";
 import { resolve as pathResolve } from "path";
-import { Folder } from "code-scryer--shared";
+import { Folder } from "../_motifs/folder/folder";
 const app = express();
 const PORT = 9001;
 
@@ -26,7 +26,7 @@ app.get("/folder", async (req, res) => {
       : res.status(500).send(err);
   }
 });
-app.get("/", (req, res) => res.send("a"));
+app.get("/", (req, res) => res.send("zara"));
 
 app.listen(PORT, () => {
   console.log(`code-scryer server running at : https://localhost:${PORT}`);

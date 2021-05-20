@@ -1,7 +1,34 @@
 # code-scryer
 
-The Code-scryer has come to explore development projects !
+Come aboard the Code Scryer to explore, visualize and interact with codebases !
 
-This fabulous and virtual boat aims to **map code bases** and to **index meaningful data**.
+## Quick start
 
-Set up your crew and gather new patterns to build the best applications !
+Install dependencies :
+
+```sh
+npm i
+```
+
+Run local dev environment :
+
+```sh
+npm run dev:server
+npm run ds # alias
+
+npm run dev:front
+npm run df # alias
+```
+
+Build production bundles :
+
+```sh
+npm run prod:server
+npm run prod:front
+```
+
+Run production server :
+
+```sh
+npm start
+```
