@@ -1,4 +1,4 @@
-import { File } from "../../../_motifs/file/file";
+import { File } from "../../../_motifs/file/File";
 
 export class ServerFile implements File {
   name: string;

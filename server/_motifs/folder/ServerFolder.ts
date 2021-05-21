@@ -1,9 +1,9 @@
 import { statSync } from "fs";
 import { readdir } from "fs/promises";
 import { resolve as pathResolve } from "path";
-import { ServerFile } from "../file/file";
-import { Folder, FolderContent } from "../../../_motifs/folder/folder";
-import { ServerState } from "../state/state";
+import { ServerFile } from "../file/ServerFile";
+import { Folder, FolderContent } from "../../../_motifs/folder/Folder";
+import { ServerState } from "../state/ServerState";
 
 export class ServerFolder implements Folder {
   static ERROR_FOLDER_NOT_FOUND = "folder not found";

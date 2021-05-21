@@ -1,5 +1,5 @@
-import { ServerState } from "../state/state";
-import { ServerFolder } from "./folder";
+import { ServerState } from "../ServerState/ServerState";
+import { ServerFolder } from "./ServerFolder";
 import { resolve as pathResolve } from "path";
 
 describe("ServerFolder", () => {

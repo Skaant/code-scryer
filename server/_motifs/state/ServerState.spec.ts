@@ -1,4 +1,4 @@
-import { ServerState } from "./state";
+import { ServerState } from "./ServerState";
 
 describe("ServerState", () => {
   test("get & set", () => {

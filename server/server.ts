@@ -1,8 +1,8 @@
 import express from "express";
 import cors from "cors";
 import { resolve as pathResolve } from "path";
-import { ServerFolder } from "./_motifs/folder/folder";
-import { ServerState } from "./_motifs/state/state";
+import { ServerFolder } from "./_motifs/folder/ServerFolder";
+import { ServerState } from "./_motifs/state/ServerState";
 
 const app = express();
 const PORT = 9001;

@@ -1,5 +1,5 @@
-import { File } from "../file/file";
-import { Folder } from "../folder/folder";
+import { File } from "../file/File";
+import { Folder } from "../folder/Folder";
 
 export type Dirent = Folder | File;
 

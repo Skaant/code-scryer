@@ -1,6 +1,6 @@
-import { File } from "../file/file";
+import { Dirent } from "../dirent/Dirent";
 
-export type FolderContent = (Folder | File)[];
+export type FolderContent = Dirent[];
 
 export interface Folder {
   name: string;
