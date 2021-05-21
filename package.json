@@ -4,11 +4,11 @@
   "description": "Come aboard the Code Scryer to explore, visualize and interact with codebases !",
   "main": "README.md",
   "scripts": {
-    "dev:server": "npx nodemon server/server.ts",
+    "dev:server": "npx nodemon server/server.ts --watch server --watch _motifs",
     "ds": "npm run dev:server",
     "dev:front": "npx webpack -c front/webpack.config.js --watch",
     "df": "npm run dev:front",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "npx jest",
     "prod:server": "npx tsc-bundle server/tsconfig.json",
     "prod:front": "npx webpack -c front/webpack.config.js --mode=production",
     "start": "node server/server.js"
