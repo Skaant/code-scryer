@@ -23,8 +23,8 @@ app.get("/folder", async (req, res) => {
   const path = req.query.path?.toString() || "";
   try {
     const folder = new ServerFolder({
-      name: "_root",
-      path: "",
+      name: "",
+      path,
     });
     await folder.provisionContent();
     return res.send(folder);

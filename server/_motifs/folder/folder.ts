@@ -20,7 +20,7 @@ export class ServerFolder implements Folder {
     path: string;
     content?: FolderContent;
   }) {
-    if (!statSync(pathResolve(ServerState.get().options.projectPath, path)))
+    if (!statSync(pathResolve(ServerState.get().options.projectPath + path)))
       throw new Error(ServerFolder.ERROR_FOLDER_NOT_FOUND);
     this.name = name;
     this.path = path;
@@ -29,13 +29,19 @@ export class ServerFolder implements Folder {
 
   async provisionContent(): Promise<FolderContent> {
     if (!this.content) {
-      const dirents = await readdir(ServerState.get().options.projectPath, {
-        withFileTypes: true,
-      });
+      const dirents = await readdir(
+        pathResolve(
+          ServerState.get().options.projectPath + this.path,
+          this.name
+        ),
+        {
+          withFileTypes: true,
+        }
+      );
       this.content = dirents.map((dirent) => {
         const props = {
           name: dirent.name,
-          path: pathResolve(this.path, dirent.name),
+          path: this.path + "/" + dirent.name,
         };
         return dirent.isFile()
           ? new ServerFile(props)
