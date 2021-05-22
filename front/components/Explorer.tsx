@@ -36,17 +36,15 @@ export function Explorer({
         ) : (
           direntContent?.map((dirent: Dirent) => {
             const { type, path, name } = dirent;
-            return type === "folder" ? (
+            return (
               <div
                 key={path + "/" + name}
                 onClick={() => {
                   setDirent(dirent);
                 }}
               >
-                <b>{name}</b>
+                {type === "folder" ? <b>{name}</b> : <span>{name}</span>}
               </div>
-            ) : (
-              <div>{name}</div>
             );
           })
         ))}
