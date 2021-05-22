@@ -1,5 +1,10 @@
-import { Dirent, DirentType } from "../dirent/Dirent";
+import { DirentCore } from "../dirent/Dirent";
 
-export interface File extends Dirent {
-  type: DirentType;
+export type NetworkFile = DirentCore & {
+  content?: string;
+};
+
+export interface File extends DirentCore {
+  content?: any;
+  contentString?: string;
 }

@@ -1,39 +1,55 @@
 import * as React from "react";
-import { Folder } from "../../_motifs/folder/folder";
+import { Dirent } from "../../_motifs/dirent/Dirent";
+import { getDirentRelativePath } from "../../_motifs/dirent/helpers/getDirentRelativePath";
+import { FolderContent } from "../../_motifs/folder/Folder";
 
 export function Explorer({
-  folder,
-  setFolderPath,
+  dirent,
+  direntContent,
+  setDirent,
 }: {
-  folder?: Folder;
-  setFolderPath: React.Dispatch<React.SetStateAction<string>>;
+  dirent?: Dirent;
+  direntContent?: string | FolderContent;
+  setDirent: React.Dispatch<React.SetStateAction<Dirent | undefined>>;
 }) {
   return (
     <div>
-      <h2>Explorer {folder && `(${folder.path + "/" + folder.name})`}</h2>
-      {(folder?.path || folder?.name) && (
+      <h2>Explorer {dirent && `(${getDirentRelativePath(dirent)})`}</h2>
+      {(dirent?.path || dirent?.name) && (
         <div
           onClick={() => {
-            folder && setFolderPath(folder.path);
+            const splitPath = dirent.path.replace(/[\\]/g, "/").split("/");
+            const name = splitPath.pop() || "";
+            setDirent({
+              type: "folder",
+              name,
+              path: splitPath.join("/"),
+            });
           }}
         >
           <i>Retour</i>
         </div>
       )}
-      {folder?.content?.map(({ type, name, path }) =>
-        type === "folder" ? (
-          <div
-            key={path + "/" + name}
-            onClick={() => {
-              setFolderPath(path + "/" + name);
-            }}
-          >
-            <b>{name}</b>
-          </div>
+      {direntContent &&
+        (typeof direntContent === "string" ? (
+          <div>{direntContent}</div>
         ) : (
-          <div>{name}</div>
-        )
-      )}
+          direntContent?.map((dirent: Dirent) => {
+            const { type, path, name } = dirent;
+            return type === "folder" ? (
+              <div
+                key={path + "/" + name}
+                onClick={() => {
+                  setDirent(dirent);
+                }}
+              >
+                <b>{name}</b>
+              </div>
+            ) : (
+              <div>{name}</div>
+            );
+          })
+        ))}
     </div>
   );
 }

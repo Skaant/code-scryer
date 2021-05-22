@@ -1,7 +1,11 @@
-import { Dirent, DirentType } from "../dirent/Dirent";
+import { Dirent, DirentCore } from "../dirent/Dirent";
 
 export type FolderContent = Dirent[];
 
-export interface Folder extends Dirent {
-  content: FolderContent | undefined;
+export type NetworkFolder = DirentCore & {
+  content: FolderContent;
+};
+
+export interface Folder extends DirentCore {
+  content?: FolderContent;
 }

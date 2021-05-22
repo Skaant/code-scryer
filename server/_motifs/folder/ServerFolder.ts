@@ -2,9 +2,14 @@ import { statSync } from "fs";
 import { readdir } from "fs/promises";
 import { resolve as pathResolve } from "path";
 import { ServerFile } from "../file/ServerFile";
-import { Folder, FolderContent } from "../../../_motifs/folder/Folder";
+import {
+  Folder,
+  FolderContent,
+  NetworkFolder,
+} from "../../../_motifs/folder/Folder";
 import { ServerState } from "../state/ServerState";
 import { DirentType } from "../../../_motifs/dirent/Dirent";
+import { File } from "../../../_motifs/file/File";
 
 export class ServerFolder implements Folder {
   static ERROR_FOLDER_NOT_FOUND = "folder not found";
@@ -46,10 +51,16 @@ export class ServerFolder implements Folder {
           path: this.path + "/" + this.name,
         };
         return dirent.isFile()
-          ? new ServerFile(props)
-          : new ServerFolder(props);
+          ? (new ServerFile(props) as File)
+          : (new ServerFolder(props) as Folder);
       });
     }
     return this.content;
+  }
+
+  async toNetwork() {
+    const { type, path, name } = this;
+    const content = await this.provisionContent();
+    return { type, path, name, content } as NetworkFolder;
   }
 }
