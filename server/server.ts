@@ -21,10 +21,13 @@ app.use(
 
 app.get("/folder", async (req, res) => {
   const path = req.query.path?.toString() || "";
+  const splitPath = path.split("/");
+  const name = splitPath.pop() || "";
   try {
     const folder = new ServerFolder({
-      name: "",
-      path,
+      name,
+      /** `splitPath` has one less due to `.pop()`. */
+      path: splitPath.join("/"),
     });
     await folder.provisionContent();
     return res.send(folder);

@@ -10,17 +10,30 @@ export function Explorer({
 }) {
   return (
     <div>
-      {folder?.content?.map(({ name, path }) => (
+      <h2>Explorer {folder && `(${folder.path + "/" + folder.name})`}</h2>
+      {(folder?.path || folder?.name) && (
         <div
-          key={path}
           onClick={() => {
-            console.log(path);
-            setFolderPath(path);
+            folder && setFolderPath(folder.path);
           }}
         >
-          {name}
+          <i>Retour</i>
         </div>
-      ))}
+      )}
+      {folder?.content?.map(({ type, name, path }) =>
+        type === "folder" ? (
+          <div
+            key={path + "/" + name}
+            onClick={() => {
+              setFolderPath(path + "/" + name);
+            }}
+          >
+            <b>{name}</b>
+          </div>
+        ) : (
+          <div>{name}</div>
+        )
+      )}
     </div>
   );
 }

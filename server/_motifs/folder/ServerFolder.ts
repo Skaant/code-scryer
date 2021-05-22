@@ -43,7 +43,7 @@ export class ServerFolder implements Folder {
       this.content = dirents.map((dirent) => {
         const props = {
           name: dirent.name,
-          path: this.path + "/" + dirent.name,
+          path: this.path + "/" + this.name,
         };
         return dirent.isFile()
           ? new ServerFile(props)
