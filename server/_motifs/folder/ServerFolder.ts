@@ -1,6 +1,7 @@
 import { statSync } from "fs";
 import { readdir } from "fs/promises";
 import { resolve as pathResolve } from "path";
+import { getDirentRelativePath } from "../../../_motifs/dirent/helpers/getDirentRelativePath";
 import { ServerFile } from "../file/ServerFile";
 import {
   Folder,
@@ -18,6 +19,7 @@ export class ServerFolder implements Folder {
   path: string;
   content: FolderContent | undefined;
 
+  /** @throws {Error} "ERROR_FOLDER_NOT_FOUND" */
   constructor({
     name,
     path,
@@ -27,8 +29,19 @@ export class ServerFolder implements Folder {
     path: string;
     content?: FolderContent;
   }) {
-    if (!statSync(pathResolve(ServerState.get().options.projectPath + path)))
-      throw new Error(ServerFolder.ERROR_FOLDER_NOT_FOUND);
+    try {
+      !statSync(
+        pathResolve(
+          ServerState.get().options.projectPath +
+            "/" +
+            getDirentRelativePath({ type: this.type, name, path })
+        )
+      );
+    } catch (err) {
+      if (err.code === "ENOENT")
+        throw new Error(ServerFolder.ERROR_FOLDER_NOT_FOUND);
+      throw err;
+    }
     this.name = name;
     this.path = path;
     this.content = content;
