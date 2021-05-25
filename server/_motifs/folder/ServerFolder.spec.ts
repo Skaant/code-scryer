@@ -1,14 +1,11 @@
 import { ServerState } from "../state/ServerState";
 import { ServerFolder } from "./ServerFolder";
 import { resolve as pathResolve } from "path";
+import { ServerStateMock } from "../state/ServerState.mock";
 
 describe("ServerFolder", () => {
   beforeAll(() => {
-    ServerState.set({
-      options: {
-        projectPath: pathResolve(__dirname, "../../.."),
-      },
-    });
+    ServerStateMock();
   });
 
   describe("constructor", () => {
