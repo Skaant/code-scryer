@@ -2,8 +2,9 @@ import { statSync } from "fs";
 import { DirentType } from "../../../_motifs/dirent/Dirent";
 import { resolve as pathResolve } from "path";
 import { File, NetworkFile } from "../../../_motifs/file/File";
-import { readFile } from "fs/promises";
+import { readFile, writeFile } from "fs/promises";
 import { ServerState } from "../state/ServerState";
+import { getDirentRelativePath } from "../../../_motifs/dirent/helpers/getDirentRelativePath";
 
 export class ServerFile implements File {
   static ERROR_FOLDER_NOT_FOUND = "file not found";
@@ -12,6 +13,22 @@ export class ServerFile implements File {
   path: string;
   content?: any;
   contentString?: string;
+
+  static async create({
+    name,
+    path,
+    content,
+  }: {
+    name: string;
+    path: string;
+    content: string;
+  }) {
+    writeFile(
+      getDirentRelativePath({ type: "file", name, path }),
+      content,
+      "utf-8"
+    );
+  }
 
   constructor({ name, path }: { name: string; path: string }) {
     if (!statSync(pathResolve(ServerState.get().options.projectPath + path)))
