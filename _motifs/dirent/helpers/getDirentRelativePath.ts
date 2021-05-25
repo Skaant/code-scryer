@@ -1,7 +1,6 @@
 import { Dirent } from "../Dirent";
 
-export function getDirentRelativePath(dirent?: Dirent): string {
-  return dirent
-    ? `${dirent.path}${dirent.path.endsWith("/") ? "" : "/"}${dirent.name}`
-    : "/";
+/** @returns {string} path **is not starting with a "/"**. */
+export function getDirentRelativePath({ path, name }: Dirent): string {
+  return `${path}${path && name ? "/" : ""}${name}`;
 }
