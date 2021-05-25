@@ -6,7 +6,7 @@
   "scripts": {
     "dev:server": "npx nodemon server/server.ts --watch server --watch _motifs",
     "ds": "npm run dev:server",
-    "dev:front": "npx webpack -c front/webpack.config.js -d --watch",
+    "dev:front": "npx webpack -c front/webpack.config.js --mode=development --watch",
     "df": "npm run dev:front",
     "test": "npx jest",
     "prod:server": "npx tsc-bundle server/tsconfig.json",

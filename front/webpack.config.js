@@ -1,4 +1,5 @@
 module.exports = {
+  devtool: "eval-source-map",
   entry: "./front/front.tsx",
   output: {
     path: __dirname,
