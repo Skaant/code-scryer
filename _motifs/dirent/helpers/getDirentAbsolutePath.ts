@@ -3,7 +3,9 @@ import { Dirent } from "../Dirent";
 import { getDirentRelativePath } from "./getDirentRelativePath";
 import { resolve as pathResolve } from "path";
 
-export function getDirentAbsolutePath(dirent: Dirent): string {
+export function getDirentAbsolutePath(
+  dirent: Pick<Dirent, "path" | "name">
+): string {
   const absoluteRootPath = ServerState.get().options.projectPath;
   const relativePath = getDirentRelativePath(dirent);
   return pathResolve(

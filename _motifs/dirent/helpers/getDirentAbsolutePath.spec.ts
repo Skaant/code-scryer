@@ -8,14 +8,14 @@ describe("getDirentAbsolutePath", () => {
   });
 
   test("root folder path", () => {
-    expect(
-      getDirentAbsolutePath({ type: "folder", path: "", name: "" })
-    ).toEqual(pathResolve(__dirname, "../../.."));
+    expect(getDirentAbsolutePath({ path: "", name: "" })).toEqual(
+      pathResolve(__dirname, "../../..")
+    );
   });
 
   test("root folder file path", () => {
-    expect(
-      getDirentAbsolutePath({ type: "folder", path: "", name: ".gitignore" })
-    ).toEqual(pathResolve(__dirname, "../../../.gitignore"));
+    expect(getDirentAbsolutePath({ path: "", name: ".gitignore" })).toEqual(
+      pathResolve(__dirname, "../../../.gitignore")
+    );
   });
 });
