@@ -5,6 +5,7 @@ import { File, NetworkFile } from "../../../_motifs/file/File";
 import { readFile, writeFile } from "fs/promises";
 import { ServerState } from "../state/ServerState";
 import { getDirentRelativePath } from "../../../_motifs/dirent/helpers/getDirentRelativePath";
+import { getDirentAbsolutePath } from "../../../_motifs/dirent/helpers/getDirentAbsolutePath";
 
 export class ServerFile implements File {
   static ERROR_FOLDER_NOT_FOUND = "file not found";
@@ -15,23 +16,21 @@ export class ServerFile implements File {
   contentString?: string;
 
   static async create({
-    name,
-    path,
     content,
-  }: {
-    name: string;
-    path: string;
-    content: string;
-  }) {
-    writeFile(
-      getDirentRelativePath({ type: "file", name, path }),
-      content,
-      "utf-8"
-    );
+    ...fileData
+  }: Pick<File, "path" | "name" | "content">) {
+    // folder recursive guard
+    await writeFile(getDirentAbsolutePath({ ...fileData }), content, "utf-8");
   }
 
   constructor({ name, path }: { name: string; path: string }) {
-    if (!statSync(pathResolve(ServerState.get().options.projectPath + path)))
+    const splitParent = path.split("/");
+    const parentName = splitParent.pop() || "";
+    if (
+      !statSync(
+        getDirentAbsolutePath({ path: splitParent.join("/"), name: parentName })
+      )
+    )
       throw new Error(ServerFile.ERROR_FOLDER_NOT_FOUND);
     this.name = name;
     this.path = path;
@@ -40,10 +39,10 @@ export class ServerFile implements File {
   async provisionContent(): Promise<any> {
     if (!this.content) {
       this.content = await readFile(
-        pathResolve(
-          ServerState.get().options.projectPath + this.path,
-          this.name
-        ),
+        getDirentAbsolutePath({
+          path: this.path,
+          name: this.name,
+        }),
         {
           encoding: "utf-8",
         }
