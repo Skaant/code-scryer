@@ -126,7 +126,7 @@ describe("ServerFolder", () => {
   });
 
   describe("(static) create", () => {
-    describe("creates a folder at given ", () => {
+    describe("creates a folder with given name at given path", () => {
       it("should create a folder in _tests folder", async () => {
         const pathRecursiveGuard = jest
           .spyOn(ServerFolder, "pathRecursiveGuard")
@@ -135,15 +135,11 @@ describe("ServerFolder", () => {
           path: "_tests",
           name: "hello-23",
         };
-
         await ServerFolder.create(folder);
-
         expect(pathRecursiveGuard).toHaveBeenCalledWith(folder.path);
-
         expect(
           async () => await stat(getDirentRelativePath(folder))
         ).not.toThrow();
-
         await rm(getDirentAbsolutePath(folder), {
           force: true,
           recursive: true,
@@ -151,10 +147,6 @@ describe("ServerFolder", () => {
       });
 
       /** @todo cases ... */
-    });
-
-    describe("returns a ServerFolder instance", () => {
-      it("should return a ServerFolder instance with given params");
     });
   });
 

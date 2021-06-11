@@ -6,6 +6,7 @@ import { readFile, writeFile } from "fs/promises";
 import { ServerState } from "../state/ServerState";
 import { getDirentRelativePath } from "../../../_motifs/dirent/helpers/getDirentRelativePath";
 import { getDirentAbsolutePath } from "../../../_motifs/dirent/helpers/getDirentAbsolutePath";
+import { ServerFolder } from "../folder/ServerFolder";
 
 export class ServerFile implements File {
   static ERROR_FOLDER_NOT_FOUND = "file not found";
@@ -16,11 +17,12 @@ export class ServerFile implements File {
   contentString?: string;
 
   static async create({
+    path,
+    name,
     content,
-    ...fileData
   }: Pick<File, "path" | "name" | "content">) {
-    // folder recursive guard
-    await writeFile(getDirentAbsolutePath({ ...fileData }), content, "utf-8");
+    await ServerFolder.pathRecursiveGuard(path);
+    await writeFile(getDirentAbsolutePath({ path, name }), content, "utf-8");
   }
 
   constructor({ name, path }: { name: string; path: string }) {
