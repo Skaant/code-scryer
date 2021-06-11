@@ -2,6 +2,7 @@ import { ServerFolder } from "./ServerFolder";
 import { ServerStateMock } from "../state/ServerState.mock";
 import { stat, rm } from "fs/promises";
 import { getDirentAbsolutePath } from "../../../_motifs/dirent/helpers/getDirentAbsolutePath";
+import { getDirentRelativePath } from "../../../_motifs/dirent/helpers/getDirentRelativePath";
 
 describe("ServerFolder", () => {
   beforeAll(() => {
@@ -47,7 +48,7 @@ describe("ServerFolder", () => {
     });
   });
 
-  describe("static pathRecursiveGuard", () => {
+  describe("(static) pathRecursiveGuard", () => {
     describe("read-only mode", () => {
       describe("throws ERROR_FOLDER_NOT_FOUND: <currentPath + targetPath>", () => {
         test("root folder > folder", async () => {
@@ -124,7 +125,38 @@ describe("ServerFolder", () => {
     });
   });
 
-  describe("static create", () => {});
+  describe("(static) create", () => {
+    describe("creates a folder at given ", () => {
+      it("should create a folder in _tests folder", async () => {
+        const pathRecursiveGuard = jest
+          .spyOn(ServerFolder, "pathRecursiveGuard")
+          .mockReturnValue(Promise.resolve());
+        const folder = {
+          path: "_tests",
+          name: "hello-23",
+        };
+
+        await ServerFolder.create(folder);
+
+        expect(pathRecursiveGuard).toHaveBeenCalledWith(folder.path);
+
+        expect(
+          async () => await stat(getDirentRelativePath(folder))
+        ).not.toThrow();
+
+        await rm(getDirentAbsolutePath(folder), {
+          force: true,
+          recursive: true,
+        });
+      });
+
+      /** @todo cases ... */
+    });
+
+    describe("returns a ServerFolder instance", () => {
+      it("should return a ServerFolder instance with given params");
+    });
+  });
 
   test("provisionContent", async () => {
     const temp = new ServerFolder({
