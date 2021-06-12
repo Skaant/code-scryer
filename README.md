@@ -1,6 +1,8 @@
 # code-scryer
 
-Come aboard the Code Scryer to explore, visualize and interact with codebases !
+Come aboard the Code Scryer to explore, visualize and interact its codebase !
+
+Right now, it can only crawl its own folder/files tree, but the goal is to make it a npm module to install in projects to inspect.
 
 ## Quick start
 
