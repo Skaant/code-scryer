@@ -71,13 +71,7 @@ export class ServerFolder implements Folder {
     content?: FolderContent;
   }) {
     try {
-      !statSync(
-        pathResolve(
-          ServerState.get().options.projectPath +
-            "/" +
-            getDirentRelativePath({ name, path })
-        )
-      );
+      !statSync(pathResolve(getDirentAbsolutePath({ name, path })));
     } catch (err) {
       if (err.code === "ENOENT")
         throw new Error(ServerFolder.ERROR_FOLDER_NOT_FOUND);
@@ -90,19 +84,13 @@ export class ServerFolder implements Folder {
 
   async provisionContent(): Promise<FolderContent> {
     if (!this.content) {
-      const dirents = await readdir(
-        pathResolve(
-          ServerState.get().options.projectPath + this.path,
-          this.name
-        ),
-        {
-          withFileTypes: true,
-        }
-      );
+      const dirents = await readdir(getDirentAbsolutePath(this), {
+        withFileTypes: true,
+      });
       this.content = dirents.map((dirent) => {
         const props = {
           name: dirent.name,
-          path: this.path + "/" + this.name,
+          path: getDirentRelativePath(this),
         };
         return dirent.isFile()
           ? (new ServerFile(props) as File)
