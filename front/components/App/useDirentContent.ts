@@ -11,9 +11,9 @@ export function useDirentContent() {
   const [direntContent, setDirentContent] = useState<string | FolderContent>();
   useEffect(() => {
     fetch(
-      `http://localhost:9001/${
-        dirent?.type || "folder"
-      }?path=${getDirentRelativePath(dirent)}`
+      `http://localhost:9001/${dirent?.type || "folder"}?path=${
+        dirent ? getDirentRelativePath(dirent) : ""
+      }`
     )
       .then((res) => res.json())
       .then(({ content }: NetworkDirent) => setDirentContent(content));
